@@ -1,0 +1,62 @@
+body {
+  background-color: green;
+}
+
+.board{
+  height: 100%;
+  width: 100%;
+}
+
+.players-deck {
+  float: left;
+  margin: 10% 0 0 10%;
+  height: 182px;
+  width: 125px;
+  border: 3px solid black;
+  background-image: url("./images/card_back.png");
+}
+
+.player-deck-label {
+  float: left;
+  margin: 30% 0 0 2%;
+}
+
+.opponent-deck-label {
+  float: right;
+  margin: 30% 2% 0 0;
+}
+.opponents-deck {
+  float: right;
+  margin: 10% 10% 0 0;
+  height: 182px;
+  width: 125px;
+  border: 3px solid red;
+  background-image: url("./images/card_back.png");
+}
+
+.flipped-cards {
+  display: flex;
+  justify-content: space-between;
+  margin: 11.4% 30% 30% 30%;
+}
+
+.player-card {
+  height: 182px;
+  width: 125px;
+  border: 3px solid black;
+}
+
+.opponent-card {
+  height: 182px;
+  width: 125px;
+  border: 3px solid red;
+}
+
+.vs {
+  font-size: 3em;
+  margin: 10% 0 0 0;
+}
+
+h1 {
+  text-align: center;
+}

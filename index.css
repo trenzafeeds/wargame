@@ -3,13 +3,13 @@ body {
 }
 
 .board{
-  height: 100%;
+  height: 20%%;
   width: 100%;
 }
 
 .players-deck {
   float: left;
-  margin: 10% 0 0 10%;
+  margin: 0 0 0 10%;
   height: 182px;
   width: 125px;
   border: 3px solid black;
@@ -18,16 +18,20 @@ body {
 
 .player-deck-label {
   float: left;
-  margin: 30% 0 0 2%;
+  margin: 0 0 0 23%;
 }
 
 .opponent-deck-label {
   float: right;
-  margin: 30% 2% 0 0;
+  margin: 0 23% 0 0;
+}
+
+.play-war{
+
 }
 .opponents-deck {
   float: right;
-  margin: 10% 10% 0 0;
+  margin: 0 10% 0 0;
   height: 182px;
   width: 125px;
   border: 3px solid red;
@@ -37,7 +41,7 @@ body {
 .flipped-cards {
   display: flex;
   justify-content: space-between;
-  margin: 11.4% 30% 30% 30%;
+  margin: 11.4% 30% 4% 30%;
 }
 
 .player-card {
@@ -54,7 +58,51 @@ body {
 
 .vs {
   font-size: 3em;
-  margin: 10% 0 0 0;
+  margin: 10% auto;
+  background-color: red;
+  border: 0px;
+}
+
+.vs:hover{
+  background-color: orange;
+}
+
+.player-card.winTranslate {
+  -webkit-transition: 3s;
+  -moz-transition: 3s;
+  -ms-transition: 3s;
+  -o-transition: 3s;
+  transition: 3s;
+  margin-left: -50% !important;
+  margin-right: -50% !important;
+}
+
+.opponent-card.loseTranslate {
+  -webkit-transition: 3s;
+  -moz-transition: 3s;
+  -ms-transition: 3s;
+  -o-transition: 3s;
+  transition: 3s;
+  margin-right: 127% !important;
+}
+
+.player-card.loseTranslate {
+  -webkit-transition: 3s;
+  -moz-transition: 3s;
+  -ms-transition: 3s;
+  -o-transition: 3s;
+  transition: 3s;
+  margin-left: 127% !important;
+}
+
+.opponent-card.winTranslate {
+  -webkit-transition: 3s;
+  -moz-transition: 3s;
+  -ms-transition: 3s;
+  -o-transition: 3s;
+  transition: 3s;
+  margin-left: -50% !important;
+  margin-right: -50% !important;
 }
 
 h1 {

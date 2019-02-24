@@ -43,6 +43,23 @@ function shuffle(cards)
     }
 }
 
+function maketheDecks()
+{
+    let suits = ['C', 'S', 'H', 'D']
+    let full_deck = [];
+    for (var suitcount = 0; suits < 4; suits++){
+	for (var count = 2; count < 15; count++){
+	    full_deck.push(count.toString()+suits[suitcount]);
+	}
+	shuffle(full_deck);
+    }
+    shuffle(full_deck);
+    return [full_deck.slice(0, 26), full_deck.slice(26, 52)];
+}
+	   
+	
+    
+
 /*
  * New classes
  */
@@ -84,12 +101,18 @@ function compare(card1, card2, player1, player2)
 
 function turncards(player1, player2, list, count)
 {
+    if (player1.deck.length == 0){
+	return [1, 1];
+    }else if (player2.deck.length == 0){
+	return [1, 2];
+    }
+    
     for (var i = 0; i < count; i++){
 	list.p1.unshift(player1.deck.pop());
 	list.p2.unshift(player2.deck.pop());
     }
 
-    // TODO: Probably build actual card displaying into here somewhere 
+    return [0];
 }
 
 function givecards(player, list)
@@ -106,32 +129,43 @@ function givecards(player, list)
 function tie(player1, player2, card_list)
 {
     // TODO: Put one card face down
-    turncards(player1, player2, card_list, 1);
+    let ret = [];
+    if ((ret = turncards(player1, player2, card_list, 1))[0] == 1){
+	return ret;
+    }
+    
     let winner = compare(turned_cards.p1[0], turned_cards.p2[0]);
 
     if (winner === "TIE"){
 	return tie(player1, player2, card_list);
     }else{
-	return winner;
+	return [winner];
     }
 }   
 
 function turn(player1, player2)
 {
     let turned_cards = {p1: [], p2: []};
-    turncards(player1, player2, turned_cards, 1);
+    let ret = [];
+    if ((ret = turncards(player1, player2, turned_cards, 1))[0] == 1){
+	return ret;
+    }
+    
     let winner = compare(turned_cards.p1[0], turned_cards.p2[0]);
 
     if (winner === "TIE"){
-	givecards(tie(player1, player2, turned_cards), turned_cards);
+	if ((ret = tie(player1, player2, turned_cards))[0] == 1){
+	    return ret;
+	}else{
+	    givecards(ret[0], turned_cards);
+	}
     }else{
 	givecards(winner, turned_cards);
     }
+    return [0];
 }
 
-function Game()
-{
-}
+
 	
     
     

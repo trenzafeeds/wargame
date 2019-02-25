@@ -26,9 +26,6 @@ body {
   margin: 0 23% 0 0;
 }
 
-.play-war{
-
-}
 .opponents-deck {
   float: right;
   margin: 0 10% 0 0;
@@ -50,23 +47,31 @@ body {
   border: 3px solid black;
 }
 
-.player-war-card {
-  height: 182px;
-  width: 125px;
-  border: 3px solid black;
-}
-
-.opponent-war-card {
-  height: 182px;
-  width: 125px;
-  border: 3px solid red;
-}
 .opponent-card {
   height: 182px;
   width: 125px;
   border: 3px solid red;
 }
 
+.player-war-card {
+  height: 182px;
+  width: 125px;
+  border: 3px solid black;
+  visibility: hidden;
+}
+
+.opponent-war-card {
+  height: 182px;
+  width: 125px;
+  border: 3px solid red;
+  visibility: hidden;
+}
+
+.war-cards {
+  margin: 10% 10%;
+  display: flex;
+  justify-content: space-around;
+}
 
 
 .vs {

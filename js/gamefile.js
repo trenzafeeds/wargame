@@ -17,6 +17,8 @@ var record = {win: 0, loss: 0};
 
 var playerCard = document.getElementsByClassName('player-card')[0]
 var opponentCard = document.getElementsByClassName('opponent-card')[0]
+var playerWarCard = document.getElementsByClassName('player-war-card')[0]
+var opponentWarCard = document.getElementsByClassName('opponent-war-card')[0]
 var vs = document.getElementsByClassName('vs')[0]
 var players = init_game();
 var player = players[0];
@@ -25,6 +27,23 @@ var opponent = players[1];
 /*
  * DOM
  */
+function displayPlayerCard(card){
+  playerCard.style.backgroundImage = `url(${card})`
+}
+
+function displayOpponentCard(card){
+  opponentCard.style.backgroundImage = `url(${card})`
+}
+
+function displayPlayerWarCard(card){
+  playerWarCard.style.visibility = "visible"
+  playerWarCard.style.backgroundImage = `url(${card})`
+}
+
+function displayOpponentWarCard(card){
+  opponentWarCard.style.visibility = "visible"
+  opponentWarCard.style.backgroundImage = `url(${card})`
+}
 
 function reset(){
   setTimeout(function () {
@@ -80,7 +99,7 @@ function int_val(cardname)
 
 // This is a (modern) Fisher-Yates shuffle:
 // More: https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_modern_algorithm
-function shuffle(cards)    
+function shuffle(cards)
 {
     let divis, holder
     for (var i = cards.length - 1; i > 0; i--){
@@ -104,9 +123,9 @@ function maketheDecks()
     shuffle(full_deck);
     return [full_deck.slice(0, 26), full_deck.slice(26, 52)];
 }
-	   
-	
-    
+
+
+
 
 /*
  * New classes
@@ -123,7 +142,7 @@ function Deck(cards)
 	this.cards.push(card);
     }
 }
-	
+
 function Player(name)
 {
     this.name = name;
@@ -148,13 +167,13 @@ function compare(card1, card2, player1, player2)
 }
 
 function turncards(player1, player2, list, count)
-{   
+{
     if (player1.deck.length < count){
 	return [1, 2];
     }else if (player2.deck.length < count){
 	return [1, 1];
     }
-    
+
     for (var i = 0; i < count; i++){
 	list.p1.unshift(player1.deck.pop());
 	list.p2.unshift(player2.deck.pop());
@@ -182,7 +201,7 @@ function tie(player1, player2, card_list)
     }
 
     console.log("Tie");
-    
+
     let winner = compare(turned_cards.p1[0], turned_cards.p2[0]);
 
     if (winner === [3]){
@@ -190,7 +209,7 @@ function tie(player1, player2, card_list)
     }else{
 	return [winner];
     }
-}   
+}
 
 function turn(player1, player2)
 {
@@ -203,7 +222,7 @@ function turn(player1, player2)
     }
 
     console.log(turned_cards.p1, turned_cards.p2);
-    
+
     let winner = compare(turned_cards.p1[0], turned_cards.p2[0]);
 
     if (winner === [3]){
@@ -225,7 +244,7 @@ function init_game()
     let opp = new Player("Opponent");
 
     let stacks = maketheDecks();
-    
+
     pl.deck.cards = stacks[0];
     opp.deck.cards = stacks[1];
 
@@ -233,9 +252,3 @@ function init_game()
 
     return [pl, opp];
 }
-    
-
-
-	
-    
-    

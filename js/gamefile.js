@@ -47,7 +47,7 @@ function maketheDecks()
 {
     let suits = ['C', 'S', 'H', 'D']
     let full_deck = [];
-    for (var suitcount = 0; suits < 4; suits++){
+    for (var suitcount = 0; suitcount < 4; suitcount++){
 	for (var count = 2; count < 15; count++){
 	    full_deck.push(count.toString()+suits[suitcount]);
 	}
@@ -89,22 +89,22 @@ function Player(name)
 function compare(card1, card2, player1, player2)
 {
     if (int_val(card1) < int_val(card2)){
-	return player2; 
+	return [2]
     }else if (int_val(card1) > int_val(card2)){
-	return player1;
+	return [1]
     }else if (int_val(card1) === int_val(card2)){
-	return "TIE"
+	return [3]
     }else{
 	throw "Compare error!";
     }
 }
 
 function turncards(player1, player2, list, count)
-{
-    if (player1.deck.length == 0){
-	return [1, 1];
-    }else if (player2.deck.length == 0){
+{   
+    if (player1.deck.length < count){
 	return [1, 2];
+    }else if (player2.deck.length < count){
+	return [1, 1];
     }
     
     for (var i = 0; i < count; i++){
@@ -128,15 +128,16 @@ function givecards(player, list)
 
 function tie(player1, player2, card_list)
 {
-    // TODO: Put one card face down
     let ret = [];
-    if ((ret = turncards(player1, player2, card_list, 1))[0] == 1){
+    if ((ret = turncards(player1, player2, card_list, 2))[0] == 1){
 	return ret;
     }
+
+    console.log("Tie");
     
     let winner = compare(turned_cards.p1[0], turned_cards.p2[0]);
 
-    if (winner === "TIE"){
+    if (winner === [3]){
 	return tie(player1, player2, card_list);
     }else{
 	return [winner];
@@ -145,25 +146,46 @@ function tie(player1, player2, card_list)
 
 function turn(player1, player2)
 {
-    let turned_cards = {p1: [], p2: []};
+    var player_dict = {1:player1, 2:player2};
+    var turned_cards = {'p1':[], 'p2':[]};
     let ret = [];
-    if ((ret = turncards(player1, player2, turned_cards, 1))[0] == 1){
+    ret = turncards(player1, player2, turned_cards, 1);
+    if (ret[0] == 1){
 	return ret;
     }
+
+    console.log(turned_cards.p1, turned_cards.p2);
     
     let winner = compare(turned_cards.p1[0], turned_cards.p2[0]);
 
-    if (winner === "TIE"){
+    if (winner === [3]){
 	if ((ret = tie(player1, player2, turned_cards))[0] == 1){
 	    return ret;
 	}else{
-	    givecards(ret[0], turned_cards);
+	    givecards(player_dict[ret[0]], turned_cards);
+	    winner[0] = ret[0];
 	}
     }else{
-	givecards(winner, turned_cards);
+	givecards(player_dict[winner[0]], turned_cards);
     }
-    return [0];
+    return [0, winner[0]];
 }
+
+function init_game()
+{
+    let pl = new Player("Player");
+    let opp = new Player("Opponent");
+
+    let stacks = maketheDecks();
+    
+    pl.deck.cards = stacks[0];
+    opp.deck.cards = stacks[1];
+
+    console.log("Game initiated.");
+
+    return [pl, opp];
+}
+    
 
 
 	

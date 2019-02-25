@@ -6,13 +6,13 @@ function reset(){
   setTimeout(function () {
       playerCard.classList.remove('loseTranslate');
       opponentCard.classList.remove('winTranslate');
-      vs.innerHTML = "play";
+      vs.innerHTML = "opponent won";
       vs.style.visibility = "visible"
-    }, 3000)
+  }, 3000)
 }
 
 vs.onclick = function() {
-  
+
   if(this.innerHTML === 'player won')
   {
     playerCard.classList.add('winTranslate');
@@ -27,4 +27,4 @@ vs.onclick = function() {
     vs.style.visibility = "hidden";
     reset()
   }
- }
+}

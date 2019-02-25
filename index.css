@@ -54,21 +54,20 @@ body {
   height: 182px;
   width: 125px;
   border: 3px solid black;
-  visibility: hidden;
-}
-
-.opponent-card {
-  height: 182px;
-  width: 125px;
-  border: 3px solid red;
 }
 
 .opponent-war-card {
   height: 182px;
   width: 125px;
   border: 3px solid red;
-  visibility: hidden;
 }
+.opponent-card {
+  height: 182px;
+  width: 125px;
+  border: 3px solid red;
+}
+
+
 
 .vs {
   font-size: 3em;

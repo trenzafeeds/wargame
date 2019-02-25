@@ -9,29 +9,14 @@ function reset(){
   setTimeout(function () {
       playerCard.classList.remove('loseTranslate');
       opponentCard.classList.remove('winTranslate');
-      vs.innerHTML = "opponent won";
-      vs.style.visibility = "visible"
+      opponentCard.classList.remove('loseTranslate');
+      playerCard.classList.remove('winTranslate');
+      vs.innerHTML = "war";
+      vs.style.visibility = "visible";
   }, 3000)
 }
 
 vs.onclick = function() {
-<<<<<<< HEAD
-
-  if(this.innerHTML === 'player won')
-  {
-    playerCard.classList.add('winTranslate');
-    opponentCard.classList.add('loseTranslate');
-    vs.innerHTML = "";
-    vs.style.visibility = "hidden";
-    reset()
-  } else if (this.innerHTML === 'opponent won') {
-    playerCard.classList.add('loseTranslate');
-    opponentCard.classList.add('winTranslate');
-    vs.innerHTML = "";
-    vs.style.visibility = "hidden";
-    reset()
-  }
-=======
     let ret = turn(player, opponent);
     if (ret[0] == 0){
 	if (ret[1] == 1){
@@ -50,5 +35,4 @@ vs.onclick = function() {
 	    reset()
 	}
     }
->>>>>>> 02bc1efc437192d1df481bfc362dda3ab4e86fac
 }

@@ -1,49 +1,33 @@
-/*************
+/*
+ * In-browser game of War
+ * Javascript implementation/DOM file 
+ * Project for Internet Seminar
+ * Feb 26, 2019 | Marlboro College
+ * Nate Weeks and Kat Cannon-MacMartin
+ */
 
-NOTES:
-    - I'm planning to store cards as a list of strings. For example:
-      ['4H', '14S', '11C']
-      is a hand of 4 of hearts, ace of spades, and jack of clubs.
-      Notice that Ace is assigned 14 rather than 1, because aces
-      are high in war.
+// DOM objects for player cards and central button
+var playerCard = document.getElementsByClassName('player-card')[0];
+var opponentCard = document.getElementsByClassName('opponent-card')[0];
+var playerWarCard = document.getElementsByClassName('player-war-card')[0];
+var opponentWarCard = document.getElementsByClassName('opponent-war-card')[0];
+var vs = document.getElementsByClassName('vs')[0];
 
-
-TODO: I forgot to build in a foundation for win conditions... that was stupid.
-      Gotta add some stuff for that.
-
- *************/
-
-var record = {win: 0, loss: 0};
-
-var playerCard = document.getElementsByClassName('player-card')[0]
-var opponentCard = document.getElementsByClassName('opponent-card')[0]
-var playerWarCard = document.getElementsByClassName('player-war-card')[0]
-var opponentWarCard = document.getElementsByClassName('opponent-war-card')[0]
-var vs = document.getElementsByClassName('vs')[0]
+// Global variables for players
 var players = init_game();
-var player = players[0];
-var opponent = players[1];
+var player = players[0];        // Human
+var opponent = players[1];      // Computer
 
 /*
- * DOM
+ * Functions for manipulating the DOM
  */
+
 function displayPlayerCard(card){
   playerCard.style.backgroundImage = `url(${card})`
 }
 
 function displayOpponentCard(card){
   opponentCard.style.backgroundImage = `url(${card})`
-}
-
-function showCards(card_list, w = false)
-{
-    if (w){
-	displayPlayerWarCard(imagepath(card_list.p1[0]));
-	displayOpponentWarCard(imagepath(card_list.p2[0]));
-    }else{
-	displayPlayerCard(imagepath(card_list.p1[0]));
-	displayOpponentCard(imagepath(card_list.p2[0]));
-    }
 }
 
 function displayPlayerWarCard(card){
@@ -56,7 +40,25 @@ function displayOpponentWarCard(card){
     opponentWarCard.style.visibility = "visible"
 }
 
-function reset(){
+function showCards(card_list, w = false)
+/* Combines the four functions above. Automatically displays the top card
+ * of each player's list of played cards (the most recently played one).
+ * Second argument determines if the cards are displayed in normal or "war"
+ * positions.
+ */ 
+{
+    if (w){
+	displayPlayerWarCard(imagepath(card_list.p1[0]));
+	displayOpponentWarCard(imagepath(card_list.p2[0]));
+    }else{
+	displayPlayerCard(imagepath(card_list.p1[0]));
+	displayOpponentCard(imagepath(card_list.p2[0]));
+    }
+}
+
+function reset()
+/* Resets the board after one player wins and recieves cards. */
+{
     setTimeout(function () {
 	playerCard.style.backgroundImage = ''
 	opponentCard.style.backgroundImage = ''
@@ -71,7 +73,12 @@ function reset(){
     }, 3000)
 }
 
-vs.onclick = function() {
+vs.onclick = function()
+/* Handles each time the "war" button in the middle of the screen is
+ * pressed. This includes the game logic behind each turn, in addition
+ * to displaying cards and resetting the board.
+ */
+{
     let ret = turn(player, opponent);
     sleep(1000).then(() => {
 	
@@ -117,6 +124,7 @@ function imagepath(cardname)
     return 'images/' + cardname + '.png';
 }
 
+// Turns card-name string into integer for comparisons
 function int_val(cardname)
 {
     return parseInt(cardname.slice(0, cardname.length - 1));
@@ -141,6 +149,9 @@ function shuffle(cards)
 }
 
 function maketheDecks()
+/* Generates entire deck of cards, shuffles it a couple times,
+ * then splits it into two stacks and returns them.
+ */
 {
     let suits = ['C', 'S', 'H', 'D']
     let full_deck = [];
@@ -158,7 +169,7 @@ function maketheDecks()
 
 
 /*
- * New classes
+ * New classes (Python-like objects)
  */
 
 function Deck(cards)
@@ -184,6 +195,7 @@ function Player(name)
  */
 
 function compare(card1, card2, player1, player2)
+/* Return 1 or 2 to correspond to the winner, or 3 for a tie. */
 {
     if (int_val(card1) < int_val(card2)){
 	return [2]
@@ -197,6 +209,9 @@ function compare(card1, card2, player1, player2)
 }
 
 function turncards(player1, player2, list, count)
+/* Removes `count` many cards from each player's deck, and places them on top
+ * of that player's list in the played cards variable `list`.
+ */
 {
     if (player1.deck.length < count){
 	return [1, 2];
@@ -213,6 +228,9 @@ function turncards(player1, player2, list, count)
 }
 
 function givecards(player, list)
+/* Removes all cards from the played-cards list and sticks them on the bottom
+ * of the passed player's deck.
+ */
 {
     let all_cards = [list.p1, list.p2];
     for (var i = 0; i < 2; i++){
@@ -224,6 +242,10 @@ function givecards(player, list)
 }
 
 function tie(player1, player2, card_list)
+/* Function that sets aside one card as a "bounty" for the war, then compares another
+ * set of cards from each player's deck in order to settle a previous tie. Runs
+ * recursively in the event of multiple ties in a row.
+ */
 {
     let ret = [];
     if ((ret = turncards(player1, player2, card_list, 2))[0] == 1){
@@ -243,8 +265,8 @@ function tie(player1, player2, card_list)
 
 function turn(player1, player2)
 {
-    var player_dict = {1:player1, 2:player2};
-    var turned_cards = {'p1':[], 'p2':[]};
+    var player_dict = {1:player1, 2:player2};                      // Just for easily turning ints into player objects
+    var turned_cards = {'p1':[], 'p2':[]};                         // Holds all cards that have been "played" or set as bounties in a turn
     let ret = [];
     ret = turncards(player1, player2, turned_cards, 1);
     if (ret[0] == 1){

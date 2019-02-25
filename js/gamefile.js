@@ -35,66 +35,96 @@ function displayOpponentCard(card){
   opponentCard.style.backgroundImage = `url(${card})`
 }
 
+function showCards(card_list, w = false)
+{
+    if (w){
+	displayPlayerWarCard(imagepath(card_list.p1[0]));
+	displayOpponentWarCard(imagepath(card_list.p2[0]));
+    }else{
+	displayPlayerCard(imagepath(card_list.p1[0]));
+	displayOpponentCard(imagepath(card_list.p2[0]));
+    }
+}
+
 function displayPlayerWarCard(card){
-  playerWarCard.style.visibility = "visible"
-  playerWarCard.style.backgroundImage = `url(${card})`
+    playerWarCard.style.backgroundImage = `url(${card})`
+    playerWarCard.style.visibility = "visible"
 }
 
 function displayOpponentWarCard(card){
-  opponentWarCard.style.visibility = "visible"
-  opponentWarCard.style.backgroundImage = `url(${card})`
+    opponentWarCard.style.backgroundImage = `url(${card})`
+    opponentWarCard.style.visibility = "visible"
 }
 
 function reset(){
-  setTimeout(function () {
-      playerCard.classList.remove('loseTranslate');
-      opponentCard.classList.remove('winTranslate');
-      opponentCard.classList.remove('loseTranslate');
-      playerCard.classList.remove('winTranslate');
-      vs.innerHTML = "war";
-      vs.style.visibility = "visible";
-  }, 3000)
+    setTimeout(function () {
+	playerCard.style.backgroundImage = ''
+	opponentCard.style.backgroundImage = ''
+	playerWarCard.style.visibility = 'hidden'
+	opponentWarCard.style.visibility = 'hidden'
+	playerCard.classList.remove('loseTranslate');
+	opponentCard.classList.remove('winTranslate');
+	opponentCard.classList.remove('loseTranslate');
+	playerCard.classList.remove('winTranslate');
+	vs.innerHTML = "war";
+	vs.style.visibility = "visible";
+    }, 3000)
 }
 
 vs.onclick = function() {
     let ret = turn(player, opponent);
-    if (ret[0] == 0){
-	if (ret[1] == 1){
-	    vs.innerHTML === 'player won';
-	    playerCard.classList.add('winTranslate');
-	    opponentCard.classList.add('loseTranslate');
-	    vs.innerHTML = "";
-	    vs.style.visibility = "hidden";
-	    reset()
-	}else if (ret[1] == 2){
-	    vs.innerHTML === 'opponent won'
-	    playerCard.classList.add('loseTranslate');
-	    opponentCard.classList.add('winTranslate');
-	    vs.innerHTML = "";
-	    vs.style.visibility = "hidden";
-	    reset()
+    sleep(1000).then(() => {
+	
+	if (ret[0] == 0){
+	    if (ret[1] == 1){
+		vs.innerHTML === 'player won';
+		playerCard.classList.add('winTranslate');
+		opponentCard.classList.add('loseTranslate');
+		vs.innerHTML = "";
+		vs.style.visibility = "hidden";
+		reset()
+	    }else if (ret[1] == 2){
+		vs.innerHTML === 'opponent won'
+		playerCard.classList.add('loseTranslate');
+		opponentCard.classList.add('winTranslate');
+		vs.innerHTML = "";
+		vs.style.visibility = "hidden";
+		reset()
+	    }
+	}else if (ret[0] == 1){
+	    if (ret[1] == 1){
+		//Player wins whole game
+	    }else if (ret[1] == 2){
+		//opponent wins whole game
+	    }
 	}
-    }else if (ret[0] == 1){
-	if (ret[1] == 1){
-	    //Player wins whole game
-	}else if (ret[1] == 2){
-	    //opponent wins whole game
-	}
-    }
+    })
 }
 
 /*
  * Random helper functions
  */
 
+// Sleep from
+// https://stackoverflow.com/questions/951021/what-is-the-javascript-version-of-sleep/39914235#39914
+function sleep(ms)
+{
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+    
 function imagepath(cardname)
 {
-    return 'lib/images/' + cardname + '.png';
+    return 'images/' + cardname + '.png';
 }
 
 function int_val(cardname)
 {
     return parseInt(cardname.slice(0, cardname.length - 1));
+}
+
+function setup_tie(player, opponent)
+{
+    opponent.deck.cards[0] = player.deck.cards[0];
 }
 
 // This is a (modern) Fisher-Yates shuffle:
@@ -201,13 +231,13 @@ function tie(player1, player2, card_list)
     }
 
     console.log("Tie");
-
-    let winner = compare(turned_cards.p1[0], turned_cards.p2[0]);
+    showCards(card_list, w = true);
+    let winner = compare(card_list.p1[0], card_list.p2[0]);
 
     if (winner === [3]){
 	return tie(player1, player2, card_list);
     }else{
-	return [winner];
+	return [0, winner];
     }
 }
 
@@ -222,15 +252,17 @@ function turn(player1, player2)
     }
 
     console.log(turned_cards.p1, turned_cards.p2);
-
+    showCards(turned_cards);
+    
     let winner = compare(turned_cards.p1[0], turned_cards.p2[0]);
 
-    if (winner === [3]){
-	if ((ret = tie(player1, player2, turned_cards))[0] == 1){
+    if (winner[0] == 3){
+	ret = tie(player1, player2, turned_cards)
+	if (ret[0] == 1){
 	    return ret;
 	}else{
-	    givecards(player_dict[ret[0]], turned_cards);
-	    winner[0] = ret[0];
+	    givecards(player_dict[ret[1]], turned_cards);
+	    winner[0] = ret[1];
 	}
     }else{
 	givecards(player_dict[winner[0]], turned_cards);

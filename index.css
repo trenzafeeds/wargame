@@ -18,12 +18,12 @@ body {
 
 .player-deck-label {
   float: left;
-  margin: 0 0 0 23%;
+  margin: 0 0 0 18%;
 }
 
 .opponent-deck-label {
   float: right;
-  margin: 0 23% 0 0;
+  margin: 0 15% 0 0;
 }
 
 .opponents-deck {

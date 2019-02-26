@@ -1,6 +1,6 @@
 /*
  * In-browser game of War
- * Javascript implementation/DOM file 
+ * Javascript implementation/DOM file
  * Project for Internet Seminar
  * Feb 26, 2019 | Marlboro College
  * Nate Weeks and Kat Cannon-MacMartin
@@ -12,6 +12,9 @@ var opponentCard = document.getElementsByClassName('opponent-card')[0];
 var playerWarCard = document.getElementsByClassName('player-war-card')[0];
 var opponentWarCard = document.getElementsByClassName('opponent-war-card')[0];
 var vs = document.getElementsByClassName('vs')[0];
+var gameWinner = document.getElementsByClassName('game-title')[0];
+var playerDeckNumber = document.getElementsByClassName('player-deck-number')[0];
+var oponnentDeckNumber = document.getElementsByClassName('opponent-deck-number')[0];
 
 // Global variables for players
 var players = init_game();
@@ -21,6 +24,21 @@ var opponent = players[1];      // Computer
 /*
  * Functions for manipulating the DOM
  */
+
+// pass in opponent or player as a string
+function displayWinner(winner){
+  gameWinner.innerHTML = `${winner} won the game!`
+}
+
+// pass in the decksize
+function changePlayerDeckTotal(size){
+    playerDeckNumber.innerHTML = size
+}
+
+function changeOpponentDeckTotal(size){
+    opponentDeckNumber.innerHTML = size
+}
+
 
 function displayPlayerCard(card){
   playerCard.style.backgroundImage = `url(${card})`
@@ -45,7 +63,7 @@ function showCards(card_list, w = false)
  * of each player's list of played cards (the most recently played one).
  * Second argument determines if the cards are displayed in normal or "war"
  * positions.
- */ 
+ */
 {
     if (w){
 	displayPlayerWarCard(imagepath(card_list.p1[0]));
@@ -81,7 +99,7 @@ vs.onclick = function()
 {
     let ret = turn(player, opponent);
     sleep(1000).then(() => {
-	
+
 	if (ret[0] == 0){
 	    if (ret[1] == 1){
 		vs.innerHTML === 'player won';
@@ -118,7 +136,7 @@ function sleep(ms)
 {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
-    
+
 function imagepath(cardname)
 {
     return 'images/' + cardname + '.png';
@@ -275,7 +293,7 @@ function turn(player1, player2)
 
     console.log(turned_cards.p1, turned_cards.p2);
     showCards(turned_cards);
-    
+
     let winner = compare(turned_cards.p1[0], turned_cards.p2[0]);
 
     if (winner[0] == 3){

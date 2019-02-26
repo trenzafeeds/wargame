@@ -288,9 +288,9 @@ function tie(player1, player2, card_list)
     showCards(card_list, w = true);
     let winner = compare(card_list.p1[0], card_list.p2[0]);
 
-    console.log(winner)
+    // console.log(winner)
     if (winner[0] == 3){
-	console.log("second tie!")
+	// console.log("second tie!")
 	return tie(player1, player2, card_list);
     }else{
 	return [0, winner];

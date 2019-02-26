@@ -14,7 +14,7 @@ var opponentWarCard = document.getElementsByClassName('opponent-war-card')[0];
 var vs = document.getElementsByClassName('vs')[0];
 var gameWinner = document.getElementsByClassName('game-title')[0];
 var playerDeckNumber = document.getElementsByClassName('player-deck-number')[0];
-var oponnentDeckNumber = document.getElementsByClassName('opponent-deck-number')[0];
+var opponentDeckNumber = document.getElementsByClassName('opponent-deck-number')[0];
 
 // Global variables for players
 var players = init_game();
@@ -107,21 +107,30 @@ vs.onclick = function()
 		opponentCard.classList.add('loseTranslate');
 		vs.innerHTML = "";
 		vs.style.visibility = "hidden";
-		reset()
 	    }else if (ret[1] == 2){
 		vs.innerHTML === 'opponent won'
 		playerCard.classList.add('loseTranslate');
 		opponentCard.classList.add('winTranslate');
 		vs.innerHTML = "";
 		vs.style.visibility = "hidden";
-		reset()
 	    }
+	    changePlayerDeckTotal(player.deck.cards.length);
+	    changeOpponentDeckTotal(opponent.deck.cards.length);
+	    reset();
 	}else if (ret[0] == 1){
 	    if (ret[1] == 1){
-		//Player wins whole game
+		displayWinner(player.name);
 	    }else if (ret[1] == 2){
-		//opponent wins whole game
+		displayWinner(opponent.name);
 	    }
+	    playerCard.style.backgroundImage = ''
+	    opponentCard.style.backgroundImage = ''
+	    playerWarCard.style.visibility = 'hidden'
+	    opponentWarCard.style.visibility = 'hidden'
+	    vs.style.visibility = "hidden";
+	    sleep(10000).then(() => {
+		location.reload();
+	    })
 	}
     })
 }
@@ -151,6 +160,11 @@ function int_val(cardname)
 function setup_tie(player, opponent)
 {
     opponent.deck.cards[0] = player.deck.cards[0];
+}
+
+function setup_loss(person)
+{
+    person.deck.cards[0] = ['2S'];
 }
 
 // This is a (modern) Fisher-Yates shuffle:
@@ -231,15 +245,15 @@ function turncards(player1, player2, list, count)
  * of that player's list in the played cards variable `list`.
  */
 {
-    if (player1.deck.length < count){
-	return [1, 2];
-    }else if (player2.deck.length < count){
-	return [1, 1];
-    }
-
     for (var i = 0; i < count; i++){
 	list.p1.unshift(player1.deck.pop());
 	list.p2.unshift(player2.deck.pop());
+    }
+
+    if(list.p1[0] == undefined){
+	return [1, 2];
+    }else if (list.p2[0] == undefined){
+	return [1, 1];
     }
 
     return [0];
@@ -265,8 +279,8 @@ function tie(player1, player2, card_list)
  * recursively in the event of multiple ties in a row.
  */
 {
-    let ret = [];
-    if ((ret = turncards(player1, player2, card_list, 2))[0] == 1){
+    let ret = turncards(player1, player2, card_list, 2)[0];
+    if (ret[0] == 1){
 	return ret;
     }
 
@@ -285,8 +299,8 @@ function turn(player1, player2)
 {
     var player_dict = {1:player1, 2:player2};                      // Just for easily turning ints into player objects
     var turned_cards = {'p1':[], 'p2':[]};                         // Holds all cards that have been "played" or set as bounties in a turn
-    let ret = [];
-    ret = turncards(player1, player2, turned_cards, 1);
+    let ret = turncards(player1, player2, turned_cards, 1);
+    console.log("Ret: " + ret[0]);
     if (ret[0] == 1){
 	return ret;
     }

@@ -284,7 +284,7 @@ function tie(player1, player2, card_list)
 	return ret;
     }
 
-    console.log("Tie");
+    // console.log("Tie");
     showCards(card_list, w = true);
     let winner = compare(card_list.p1[0], card_list.p2[0]);
 
@@ -300,12 +300,12 @@ function turn(player1, player2)
     var player_dict = {1:player1, 2:player2};                      // Just for easily turning ints into player objects
     var turned_cards = {'p1':[], 'p2':[]};                         // Holds all cards that have been "played" or set as bounties in a turn
     let ret = turncards(player1, player2, turned_cards, 1);
-    console.log("Ret: " + ret[0]);
+
     if (ret[0] == 1){
 	return ret;
     }
 
-    console.log(turned_cards.p1, turned_cards.p2);
+    // console.log(turned_cards.p1, turned_cards.p2);
     showCards(turned_cards);
 
     let winner = compare(turned_cards.p1[0], turned_cards.p2[0]);
@@ -334,7 +334,7 @@ function init_game()
     pl.deck.cards = stacks[0];
     opp.deck.cards = stacks[1];
 
-    console.log("Game initiated.");
+    // console.log("Game initiated.");
 
     return [pl, opp];
 }
